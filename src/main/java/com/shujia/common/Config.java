@@ -15,7 +15,7 @@ import java.util.Map.Entry;
  * @author dingjingbo
  * 2016年5月9日
  */
-public abstract class Config {
+public class Config {
 	private static Logger LOGGER = LoggerFactory.getLogger(Config.class);
 	// 内置Config存储对象
 	private static Properties ps = new Properties();

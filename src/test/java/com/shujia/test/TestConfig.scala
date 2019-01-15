@@ -6,8 +6,7 @@ class TestConfig {
 
   @Test
   def test(): Unit ={
-    val i = com.shujia.common.Config.getInt("test")
-    println(i)
+    println("测试")
   }
 
 }
