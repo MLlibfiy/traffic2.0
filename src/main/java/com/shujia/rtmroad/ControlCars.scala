@@ -59,6 +59,8 @@ object ControlCars extends SparkTool {
     /**
       * 动态修改广播变量
       *
+      * flowDS.map(_._2).foreachRDD  ： 每个batch都会执行一次
+      *
       */
     flowDS.map(_._2).foreachRDD(rdd=>{
       val context = rdd.context
@@ -76,7 +78,12 @@ object ControlCars extends SparkTool {
           "password" -> Constants.JDBC_PASSWORD
         )).load()
 
-      val carlist = arsDF.select("car").rdd.collect().toList
+      val carlist = arsDF
+        .select("car")
+        .rdd
+        .collect()
+        .toList
+        .map(_.getAs[String]("car"))
 
       //每一次batch都会广播一次
       val carlistbroadcast = sc.broadcast(carlist)
@@ -85,11 +92,13 @@ object ControlCars extends SparkTool {
       LOGGER.info("布控的车辆："+carlist.mkString(","))
 
       val controlcarRDD =  rdd.filter(l =>{
-        LOGGER.info(l)
         val cars = carlistbroadcast.value
         val car = l.split("\t")(3)
-        !cars.contains(car)
+        cars.contains(car)
       })
+
+
+
 
 
       /**
@@ -99,18 +108,14 @@ object ControlCars extends SparkTool {
       controlcarRDD.foreachPartition(i=>{
 
         val sql = "INSERT INTO control_flow VALUES(?,?,?,?,?,?,?,?)"
-
+        val helper = JDBCHelper.getInstance()
         i.foreach(line=>{
           val list = new util.ArrayList[Array[String]]()
           list.add(line.split("\t"))
-          JDBCHelper.getInstance().executeBatch(sql,list)
+          helper.executeBatch(sql,list)
         })
-
-
       })
-
     })
-
 
     ssc.start()
     ssc.awaitTermination()
