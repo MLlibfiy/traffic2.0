@@ -18,7 +18,7 @@ trait SparkTool {
     LOGGER = LoggerFactory.getLogger(this.getClass)
     try {
       //加载用户自定义配置文件,集群运行起作用
-      //Config.loadCustomConfig(Config.getDefaultCustomConfigPath)
+      Config.loadCustomConfig(Config.getDefaultCustomConfigPath)
     }catch {
       case e: Exception=>
     }

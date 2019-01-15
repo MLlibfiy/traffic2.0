@@ -13,6 +13,8 @@
         <hbase.version>0.98.12.1-hadoop2</hbase.version>
         <spark.version>1.6.0</spark.version>
         <scala.version>2.11.0</scala.version>
+        <project.build.mainClass>com.shujia.common.boot.BOOT</project.build.mainClass>
+        <project.build.assemblyXMLLocation>src/main/assembly/assembly.xml</project.build.assemblyXMLLocation>
     </properties>
 
     <dependencies>
@@ -139,6 +141,33 @@
                     <target>1.8</target>
                     <showWarnings>true</showWarnings>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${project.build.mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <!--<descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>-->
+                    <descriptors>
+                        <descriptor>${project.build.assemblyXMLLocation}</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
 
