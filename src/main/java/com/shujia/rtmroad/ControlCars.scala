@@ -71,7 +71,7 @@ object ControlCars extends SparkTool {
         Map(
           "url" -> Constants.JDBC_URL,
           "driver" -> Constants.JDBC_DRIVER,
-          "dbtable" -> "traffic.control_cars",
+          "dbtable" -> "control_cars",
           "user" -> Constants.JDBC_USER,
           "password" -> Constants.JDBC_PASSWORD
         )).load()
@@ -88,7 +88,7 @@ object ControlCars extends SparkTool {
         LOGGER.info(l)
         val cars = carlistbroadcast.value
         val car = l.split("\t")(3)
-        cars.contains(car)
+        !cars.contains(car)
       })
 
 
@@ -97,12 +97,8 @@ object ControlCars extends SparkTool {
         *
         */
       controlcarRDD.foreachPartition(i=>{
-        /**
-          * 获取数据库连接
-          */
 
-
-        val sql = "INSERT INTO TABLE control_flow VALUES(?,?,?,?,?,?,?,?)"
+        val sql = "INSERT INTO control_flow VALUES(?,?,?,?,?,?,?,?)"
 
         i.foreach(line=>{
           val list = new util.ArrayList[Array[String]]()

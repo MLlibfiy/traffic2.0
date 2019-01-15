@@ -44,7 +44,7 @@ public class JDBCHelper {
     // 常量接口中，只是包含了这个值对应的key的名字
     static {
         try {
-            String driver = Config.getString(Constants.JDBC_DRIVER());
+            String driver = Constants.JDBC_DRIVER();
             Class.forName(driver);
         } catch (Exception e) {
             e.printStackTrace();
