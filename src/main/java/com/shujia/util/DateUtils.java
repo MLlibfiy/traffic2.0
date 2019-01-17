@@ -206,6 +206,27 @@ public class DateUtils {
         return sdf.format(date);
     }
 
+
+    /**
+     * 获取给定日期的前一分钟
+     */
+    public static String getYestoMinute(String dateMin) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        Date parse = null;
+        try {
+            parse = sdf.parse(dateMin);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(parse);
+        cal.add(Calendar.MINUTE, -1); // 设置为前一分钟
+        Date time = cal.getTime();
+        String format = sdf.format(time);
+        return format;
+    }
+
     public static String getRangeTime(String dateTime) {
         //2018-09-13 18:02:57  dateTime
         String date = dateTime.split(" ")[0];

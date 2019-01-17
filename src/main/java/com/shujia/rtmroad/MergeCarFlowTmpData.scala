@@ -1,9 +1,13 @@
 package com.shujia.rtmroad
 
+
 import com.shujia.common.SparkTool
 import com.shujia.constent.Constants
 import com.shujia.util.DateUtils
-import java.util.Date
+import java.util.{Calendar, Date}
+
+import com.shujia.common.boot.HadoopUtil
+import org.apache.hadoop.fs.{FileSystem, Path}
 
 object MergeCarFlowTmpData extends SparkTool {
   /**
@@ -24,16 +28,31 @@ object MergeCarFlowTmpData extends SparkTool {
     /**
       * 获取前一分钟目录列表
       */
-      val time = DateUtils.formatTimeMinute(new Date())
+    val time = DateUtils.formatTimeMinute(new Date())
+    val lastTIme = DateUtils.getYestoMinute(time)
+
+    //输入数据路径
+    val inputPath = Constants.CAR_FLOW_OUT_PUT_PATH_TMP + "/time=" + lastTIme + "*"
+
+    val RDD1 = sc.textFile(inputPath)
+
+    val outPutPath = Constants.CAR_FLOW_OUT_PUT_PATH+"/time="+lastTIme
+
+    //删除输出目录
+    val fileSystem = FileSystem.get(HadoopUtil.getHadoopConfig)
+    if (fileSystem.exists(new Path(outPutPath))) {
+      //删除输出目录
+      fileSystem.delete(new Path(outPutPath), true)
+    }
+
+    /**
+      * 数据存到hdfs
+      */
+    RDD1
+      .coalesce(6, false)
+      .saveAsTextFile(outPutPath)
 
 
 
-
-
-
-    val partList = List("1547709685", "1547709690")
-
-    val cityodPath = "E:\\bigdata\\traffic\\data\\a={1,2}"
-    sc.textFile(cityodPath).foreach(println)
   }
 }

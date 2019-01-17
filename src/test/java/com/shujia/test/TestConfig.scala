@@ -8,8 +8,10 @@ import java.util.Date
 class TestConfig {
 
   @Test
-  def test(): Unit ={
-   println(DateUtils.formatTimeMinute(new Date()))
+  def test(): Unit = {
+    val time = DateUtils.formatTimeMinute(new Date())
+    println(time)
+    println(DateUtils.getYestoMinute("201901171600"))
   }
 
 }
