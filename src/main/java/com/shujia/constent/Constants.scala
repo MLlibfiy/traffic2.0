@@ -39,4 +39,10 @@ object Constants {
   val JDBC_URL = Config.getString("jdbc.url")
   val JDBC_USER = Config.getString("jdbc.user")
   val JDBC_PASSWORD = Config.getString("jdbc.password")
+
+
+  val CAR_FLOW_OUT_PUT_PATH = Config.getString("car_flow_out_put_path")
+  val CAR_FLOW_OUT_PUT_PATH_TMP = Config.getString("car_flow_out_put_path_tmp")
+
+  val CAR_FLOW_CHECKPOINT = Config.getString("car_flow_checkpoint")
 }
