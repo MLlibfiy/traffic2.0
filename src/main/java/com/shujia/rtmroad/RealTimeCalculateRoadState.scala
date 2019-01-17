@@ -2,10 +2,14 @@ package com.shujia.rtmroad
 
 import com.shujia.common.SparkTool
 import com.shujia.constent.Constants
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.hbase.client.HConnectionManager
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.dstream.ReceiverInputDStream
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Durations, StreamingContext}
+import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.util.Bytes
 
 /**
   * 计算道路实时溶度情况
@@ -69,8 +73,30 @@ object RealTimeCalculateRoadState extends SparkTool {
         //计算平均速度
         val avgSpeed = sumSpeed / sumNum
         (roadId, sumSpeed, sumNum, avgSpeed)
+      }).foreachRDD(rdd => {
+      rdd.foreachPartition(line => {
+        //建立hbase连接
+        val conf: Configuration = new Configuration
+        conf.set("hbase.zookeeper.quorum", Constants.ZOOKEEPER)
+        //创建zookeeper连接
+        val connection = HConnectionManager.createConnection(conf)
+        val table = connection.getTable("RealTimeCalculateRoadState")
+        //一行一行插入hbase
+        for (elem <- line) {
+          val roadId = elem._1
+          val sumSpeed = elem._2
+          val sumNum = elem._3
+          val avgSpeed = elem._4
+          val put = new Put(roadId.getBytes)
+          put.add("info".getBytes, "sumSpeed".getBytes(), Bytes.toBytes(sumSpeed))
+          put.add("info".getBytes, "sumNum".getBytes(), Bytes.toBytes(sumNum))
+          put.add("info".getBytes, "avgSpeed".getBytes(), Bytes.toBytes(avgSpeed))
+          table.put(put)
+        }
+        table.close()
+        connection.close()
       })
-      .print()
+    })
 
     ssc.start()
     ssc.awaitTermination()
