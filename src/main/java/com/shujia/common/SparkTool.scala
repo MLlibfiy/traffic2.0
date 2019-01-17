@@ -1,5 +1,6 @@
 package com.shujia.common
 
+import com.shujia.constent.Constants
 import org.apache.spark.{SparkConf, SparkContext}
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -23,6 +24,11 @@ trait SparkTool {
       case e: Exception=>
     }
     conf = new SparkConf()
+
+    /**
+      * 指定classpath
+      *
+      */
     //设置spark appName
     conf.setAppName(this.getClass.getSimpleName.replace("$", ""))
     this.init(args)

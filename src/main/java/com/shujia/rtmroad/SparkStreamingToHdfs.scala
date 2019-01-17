@@ -2,10 +2,12 @@ package com.shujia.rtmroad
 
 import com.shujia.common.SparkTool
 import com.shujia.constent.Constants
+import com.shujia.util.DateUtils
 import kafka.serializer.StringDecoder
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Durations, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
+import java.util.Date
 
 object SparkStreamingToHdfs extends SparkTool{
   /**
@@ -40,10 +42,10 @@ object SparkStreamingToHdfs extends SparkTool{
       .filter(line => true)//过滤掉脏数据
       .foreachRDD(rdd => {
 
-      val time = System.currentTimeMillis()
+      val time = System.currentTimeMillis().toString.substring(0,10)
 
       //数据存到hdfs  ,每5秒一个分区，一般来说，需要对小文件合并
-      rdd.saveAsTextFile(Constants.CAR_FLOW_OUT_PUT_PATH_TMP +"/time="+time)
+      rdd.saveAsTextFile(Constants.CAR_FLOW_OUT_PUT_PATH_TMP +"/time="+DateUtils.formatTimeMillis(new Date()))
 
     })
     ssc.start()

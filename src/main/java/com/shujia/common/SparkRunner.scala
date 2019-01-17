@@ -40,7 +40,7 @@ object SparkRunner {
     LOGGER.info("******************** START THE SPARK JOB ********************")
     LOGGER.info(sprkShell.toString)
     //执行spark程序
-    //ComandUtil.execute(sprkShell.toString)
+    ComandUtil.execute(sprkShell.toString)
   }
 
   /**
@@ -77,7 +77,7 @@ object SparkRunner {
     sprkShell.append(" --class ").append(sparkTool.getClass.getName.replace("$", ""))
     //增加main方法所在jar包
     val listFiles = getLibJars()
-    val projectName = Constants.PROJECT_NAME
+    val projectName = Constants.PROJECT_HOME
     if (projectName == null) {
       LOGGER.error("请在default.properties中配置project.name")
     } else {

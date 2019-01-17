@@ -44,7 +44,7 @@ public class JDBCHelper {
     // 常量接口中，只是包含了这个值对应的key的名字
     static {
         try {
-            String driver = Constants.JDBC_DRIVER();
+            String driver = Constants.JDBC_DRIVER;
             Class.forName(driver);
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,12 +89,12 @@ public class JDBCHelper {
     private JDBCHelper() {
         // 首先第一步，获取数据库连接池的大小，就是说，数据库连接池中要放多少个数据库连接
         // 这个，可以通过在配置文件中配置的方式，来灵活的设定
-        int datasourceSize = Constants.JDBC_DATASOURCE_SIZE();
+        int datasourceSize = Constants.JDBC_DATASOURCE_SIZE;
 
         // 然后创建指定数量的数据库连接，并放入数据库连接池中
         for (int i = 0; i < datasourceSize; i++) {
             try {
-                Connection conn = DriverManager.getConnection(Constants.JDBC_URL(), Constants.JDBC_USER(), Constants.JDBC_PASSWORD());
+                Connection conn = DriverManager.getConnection(Constants.JDBC_URL, Constants.JDBC_USER, Constants.JDBC_PASSWORD);
                 datasource.push(conn);
             } catch (Exception e) {
                 e.printStackTrace();

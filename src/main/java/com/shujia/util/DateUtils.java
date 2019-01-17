@@ -193,6 +193,19 @@ public class DateUtils {
         return sdf.format(date);
     }
 
+    /**
+     * 格式化时间，保留到M秒级别
+     * yyyyMMddHHmm
+     *
+     * @param date
+     * @return
+     */
+
+    public static String formatTimeMillis(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(date);
+    }
+
     public static String getRangeTime(String dateTime) {
         //2018-09-13 18:02:57  dateTime
         String date = dateTime.split(" ")[0];
