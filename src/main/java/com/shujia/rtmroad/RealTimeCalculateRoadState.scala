@@ -23,6 +23,10 @@ import org.apache.hadoop.hbase.util.Bytes
   * 1、以道路编号作为rowkey
   * 2、均速度，总的车辆数，总的速度 ，保存三列（版本数量根据实际需求设置）
   *
+  *
+  * 建表语句
+  *   create 'RealTimeCalculateRoadState', {NAME => 'info', VERSIONS => 60}
+  *
   */
 object RealTimeCalculateRoadState extends SparkTool {
   /**
