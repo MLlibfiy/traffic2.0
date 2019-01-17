@@ -8,6 +8,14 @@ import com.shujia.common.Config
   */
 object Constants {
 
+
+  val ZOOKEEPER = Config.getString("zookeeper")
+
+  /**
+    * kafka数据分隔符
+    */
+  val KAFKA_IN_SPLIT = "\t"
+
   val IN_SPLIT = ","
   val OUT_SPLIT = ","
   /**

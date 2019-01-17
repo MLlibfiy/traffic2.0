@@ -39,6 +39,8 @@ object ControlCars extends SparkTool {
     //构建spark streaming 上下文对象
     val ssc = new StreamingContext(sc, Durations.seconds(5))
 
+
+    ssc.checkpoint("traffic/checkpoint")
     /**
       * 连接kafka
       * 使用direct模式
@@ -99,8 +101,6 @@ object ControlCars extends SparkTool {
 
 
 
-
-
       /**
         * 将结果存到数据亏
         *
@@ -116,6 +116,8 @@ object ControlCars extends SparkTool {
         })
       })
     })
+
+    flowDS.print()
 
     ssc.start()
     ssc.awaitTermination()
