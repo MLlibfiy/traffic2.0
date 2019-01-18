@@ -1,0 +1,1 @@
+spark-submit --master local --class com.shujia.rtmroad.RealTimeCalculateRoadState --conf spark.executor.extraClassPath=/root/traffic-2.0/lib/*  --conf spark.driver.extraClassPath=/root/traffic-2.0/lib/* /root/traffic-2.0/lib/traffic-2.0.jar

@@ -1,0 +1,2 @@
+type=command
+command=bash /root/traffic-2.0/bin/real_time_calculate_road_state.sh

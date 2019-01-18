@@ -1,2 +1,1 @@
-
-nohup flume-ng agent -c conf -f ../conf/FlumeToKafka.properties -name agent -Dflume.root.logger=INFO,console >> ../logs/flume_to_kafka.log 2>&1 &
+flume-ng agent -c conf -f /root/traffic-2.0/conf/FlumeToKafka.properties -name agent -Dflume.root.logger=INFO,console

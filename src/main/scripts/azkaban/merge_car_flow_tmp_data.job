@@ -1,0 +1,2 @@
+type=command
+command=bash /root/traffic-2.0/bin/merge_car_flow_tmp_data.sh

@@ -1,0 +1,2 @@
+type=command
+command=bash /root/traffic-2.0/bin/flume_to_kafka.sh

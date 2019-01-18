@@ -1,0 +1,2 @@
+type=command
+command=bash /root/traffic-2.0/bin/car_flow_tmp_data_to_hdfs.sh
