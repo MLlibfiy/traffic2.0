@@ -1,0 +1,1 @@
+spark-submit --master local[4] --class com.shujia.index.AreaTop3RoadFlowAnalyze --conf spark.sql.shuffle.partitions=10 --conf spark.executor.extraClassPath=/root/traffic-2.0/lib/*  --conf spark.driver.extraClassPath=/root/traffic-2.0/lib/* /root/traffic-2.0/lib/traffic-2.0.jar $1

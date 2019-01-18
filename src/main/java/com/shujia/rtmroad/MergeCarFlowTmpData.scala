@@ -1,6 +1,8 @@
 package com.shujia.rtmroad
 
 
+import java.text.SimpleDateFormat
+
 import com.shujia.common.SparkTool
 import com.shujia.constent.Constants
 import com.shujia.util.DateUtils
@@ -28,7 +30,10 @@ object MergeCarFlowTmpData extends SparkTool {
     /**
       * 获取前一分钟目录列表
       */
-    val time = DateUtils.formatTimeMinute(new Date())
+    val sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val dateStr = args(0)
+    val date = sdf.parse(dateStr.replace("T"," "))
+    val time = DateUtils.formatTimeMinute(date)
     val lastTIme = DateUtils.getYestoMinute(time)
 
     //输入数据路径

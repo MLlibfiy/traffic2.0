@@ -1,0 +1,3 @@
+type=command
+dependencies=merge_car_flow_tmp_data
+command=bash /root/traffic-2.0/bin/area_top3_road_flow_analyze.sh ${azkaban.flow.start.timestamp}

@@ -1,15 +1,21 @@
 package com.shujia.index
 
+import java.text.SimpleDateFormat
+
 import com.shujia.common.SparkTool
 import com.shujia.constent.Constants
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.client.{HConnectionManager, Put}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.spark.sql.hive.HiveContext
+import java.util.Date
+
+import com.shujia.util.DateUtils
 
 
 /**
   * 计算出每一个区域top3的道路流量
+  *
   *
   */
 object AreaTop3RoadFlowAnalyze extends SparkTool {
@@ -30,11 +36,16 @@ object AreaTop3RoadFlowAnalyze extends SparkTool {
     /**
       * 需要分析的数据分区
       */
-    val time = args(0)
+    val sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val dateStr = args(0)
+    val date = sdf.parse(dateStr.replace("T"," "))
+    val time = DateUtils.formatTimeMinute(date)
+    val lastTIme = DateUtils.getYestoMinute(time)
+
 
     val hiveContext = new HiveContext(sc)
 
-    val sql = "select area_id,road_id,c from (select area_id,road_id,c,row_number() over(partition by area_id order by c desc) as rank from  (select area_id,road_id,count(1) as c from car_flow where time=" + time + " group by area_id,road_id) as a )as b where rank<=3;"
+    val sql = "select area_id,road_id,c from (select area_id,road_id,c,row_number() over(partition by area_id order by c desc) as rank from  (select area_id,road_id,count(1) as c from car_flow where time=" + lastTIme + " group by area_id,road_id) as a )as b where rank<=3"
 
     val df = hiveContext.sql(sql)
 
@@ -54,10 +65,10 @@ object AreaTop3RoadFlowAnalyze extends SparkTool {
       for (row <- rowList) {
         val areaId = row.getAs[String]("area_id")
         val roadId = row.getAs[String]("road_id")
-        val count = row.getAs[String]("c")
-        val rowkey = areaId + "_" + time + "" + roadId
+        val count = row.getAs[Long]("c")
+        val rowkey = areaId + "_" + lastTIme + "_" + roadId
         val put = new Put(rowkey.getBytes())
-        put.add("info".getBytes(),"count".getBytes(),Bytes.toBytes(count.toInt))
+        put.add("info".getBytes(),"count".getBytes(),Bytes.toBytes(count))
 
         table.put(put)
       }
