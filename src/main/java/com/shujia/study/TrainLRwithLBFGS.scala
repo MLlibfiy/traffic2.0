@@ -30,24 +30,25 @@ object TrainLRwithLBFGS {
 
     // fetch data from redis
     val jedis: Jedis = RedisClient.pool.getResource
-    jedis.select(5)
+    jedis.select(3)
 
     // find relative road monitors for specified road
     // val camera_ids = List("310999003001","310999003102","310999000106","310999000205","310999007204")
 
     val camera_ids = List("310999003001", "310999003102")
-    val camera_relations: Map[String, Array[String]] = Map[String, Array[String]](
+    val camera_relations: Map[String, Array[String]] =
+      Map[String, Array[String]](
       "310999003001" -> Array("310999003001", "310999003102", "310999000106", "310999000205", "310999007204"),
       "310999003102" -> Array("310999003001", "310999003102", "310999000106", "310999000205", "310999007204")
     )
 
-    val temp: List[Any] = camera_ids.map({ camera_id =>
+     camera_ids.map({ camera_id =>
       val hours = 6
       //拿到当前时间戳
       val nowtimelong: Long = System.currentTimeMillis()
       val now = new Date(nowtimelong)
       //            val day = dayFormat.format(now)
-      val day = "20180917"
+      val day = "20190225"
       // Option Some None
       val list = camera_relations(camera_id)
 
@@ -112,6 +113,8 @@ object TrainLRwithLBFGS {
       val training = splits(0)
       val test = splits(1)
 
+      println(data)
+
       if (!data.isEmpty()) {
 
         // 构建逻辑回归算法模型
@@ -136,7 +139,7 @@ object TrainLRwithLBFGS {
 
         //判断准确率是否大于0.8
         if (precision > 0.8) {
-          val path: String = "E:\\第一期\\大数据\\spark\\项目\\Traffic\\out\\model_" + camera_id + "_" + nowtimelong
+          val path: String = "E:\\bigdata\\traffic\\out\\model_" + camera_id + "_" + nowtimelong
           model.save(sc, path)
           println("saved model to " + path)
           jedis.hset("model", camera_id, path)

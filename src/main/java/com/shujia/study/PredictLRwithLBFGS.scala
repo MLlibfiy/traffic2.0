@@ -23,7 +23,7 @@ object PredictLRwithLBFGS {
 
     def main(args: Array[String]) {
 
-        val input = "2018-09-17_11:18:00"
+        val input = "2019-02-25_16:32:00"
         val date: Date = sdf.parse( input )
         val inputTimeLong: Long = date.getTime
         val inputTime = new Date(inputTimeLong)
@@ -31,7 +31,7 @@ object PredictLRwithLBFGS {
 
         // fetch data from redis
         val jedis: Jedis = RedisClient.pool.getResource
-        jedis.select(5)
+        jedis.select(3)
 
         val camera_ids = List("310999003001","310999003102")
         val camera_relations:Map[String,Array[String]] = Map[String,Array[String]](
@@ -39,7 +39,7 @@ object PredictLRwithLBFGS {
             "310999003102" -> Array("310999003001","310999003102","310999000106","310999000205","310999007204")
         )
 
-        val temp: List[lang.Long] = camera_ids.map({ camera_id =>
+        camera_ids.map({ camera_id =>
             val list = camera_relations(camera_id)
 
             val relations: Array[(String, util.Map[String, String])] = list.map({ camera_id =>
